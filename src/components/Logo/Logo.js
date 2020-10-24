@@ -9,13 +9,13 @@ const Logo = () => {
       <Tilt
         className="Tilt br2 shadow-22"
         options={{ max: 25 }}
-        style={{ height: 200, width: 200 }}
+        style={{ height: "150px", width: "150px" }}
       >
         <div
           className="Tilt-inner pa3"
-          style={{ paddingTop: "50px", paddingLeft: "20px" }}
+          style={{ paddingTop: "auto", paddingLeft: "auto" }}
         >
-          <img src={logo} height="125px" alt="sipintar" />
+          <img src={logo} height="100px" alt="sipintar" />
         </div>
       </Tilt>
     </div>
