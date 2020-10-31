@@ -1,10 +1,10 @@
 import React from "react";
 
-const Rank = () => {
+const Rank = ({ name, entries }) => {
   return (
     <div>
-      <div className="white f3">{`Sindu, ranking anda sekarang...`}</div>
-      <div className="white f2">{`#5`}</div>
+      <div className="white f3">{`${name}, ranking anda sekarang...`}</div>
+      <div className="white f2">{entries}</div>
     </div>
   );
 };
