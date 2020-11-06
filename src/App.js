@@ -8,11 +8,11 @@ import ImageLinkForm from "./components/ImageLinkForm/ImageLinkForm";
 import SignIn from "./components/SignIn/SignIn";
 import Register from "./components/Register/Register";
 import Particles from "react-particles-js";
-import Clarifai from "clarifai";
+// import Clarifai from "clarifai";
 
-const app = new Clarifai.App({
-  apiKey: "8d098c608e6d49c2bdfa9d842b75af1f",
-});
+// const app = new Clarifai.App({
+//   apiKey: "8d098c608e6d49c2bdfa9d842b75af1f",
+// });
 
 const particlesOptions = {
   particles: {
@@ -26,24 +26,26 @@ const particlesOptions = {
   },
 };
 
+const initialState = {
+  input: "",
+  imageURL: "",
+  box: {},
+  route: "signIn",
+  isSignIn: false,
+  user: {
+    id: "",
+    name: "",
+    email: "",
+    password: "",
+    entries: 0,
+    joined: "",
+  },
+};
+
 class App extends Component {
   constructor() {
     super();
-    this.state = {
-      input: "",
-      imageURL: "",
-      box: {},
-      route: "signIn",
-      isSignIn: false,
-      user: {
-        id: "",
-        name: "",
-        email: "",
-        password: "",
-        entries: 0,
-        joined: "",
-      },
-    };
+    this.state = initialState;
   }
 
   loadUser = (data) => {
@@ -61,9 +63,7 @@ class App extends Component {
 
   onRouteChange = (route) => {
     if (route === "signOut") {
-      this.setState({
-        isSignIn: false,
-      });
+      this.setState(initialState);
     } else if (route === "home") {
       this.setState({
         isSignIn: true,
@@ -98,8 +98,14 @@ class App extends Component {
 
   onPictureSubmit = () => {
     this.setState({ imageURL: this.state.input });
-    app.models
-      .predict(Clarifai.FACE_DETECT_MODEL, this.state.input)
+    fetch("http://localhost:3001/imageurl", {
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        input: this.state.input,
+      }),
+    })
+      .then((response) => response.json())
       .then((response) => {
         if (response) {
           fetch("http://localhost:3001/image", {
@@ -112,7 +118,8 @@ class App extends Component {
             .then((response) => response.json())
             .then((count) => {
               this.setState(Object.assign(this.state.user, { entries: count }));
-            });
+            })
+            .catch(console.log);
         }
         this.displayFaceBox(this.calculateFaceLocation(response));
       })
